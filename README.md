@@ -6,7 +6,7 @@ Code, settings, and results for a study of how a tomato leaf-disease classifier 
 
 | File | Description |
 |---|---|
-| `LeafGuard.ipynb` | Complete executed notebook: data download, cleaning, training, evaluation, figures, demo |
+| `leafguard.ipynb` | Complete executed notebook: data download, cleaning, training, evaluation, figures, demo |
 | `requirements.txt` | Exact package versions used for the reported results |
 | `results_table.csv` | Table 1: all four methods on the same test sets |
 | `results_chart.png`, `reliability.png`, `field_confusion.png`, `field_confusion_aug.png`, `field_examples.png` | Figures used in the paper |
@@ -30,7 +30,7 @@ The notebook downloads both datasets automatically. They are not stored in this 
 
 ## How to reproduce
 
-1. Open `LeafGuard.ipynb` in Google Colab (File → Upload notebook, or File → Open notebook → GitHub).
+1. Open `leafguard.ipynb` in Google Colab (File → Upload notebook, or File → Open notebook → GitHub).
 2. Select a GPU: Runtime → Change runtime type → T4 GPU.
 3. Run everything: Runtime → Run all. Upload `kaggle.json` when prompted.
 4. Compare the printed Table 1 with `results_table.csv`. The notebook also prints the Trust Score analysis and per-class results, and saves every figure.
@@ -55,6 +55,20 @@ The notebook downloads both datasets automatically. They are not stored in this 
 - LeafGuard + augmentation: 24.6% accuracy and 0.169 macro-F1 on real-world photos.
 - Before the duplicate audit (743 real-world photos): LeafGuard 24.0% / 0.154; LeafGuard + augmentation 24.9% / 0.170.
 - Full results: `results_table_audited.csv` and `trust_thresholds_audited.csv` inside `leafguard_artifacts.zip`.
+
+## Saved artifacts (check results without re-running)
+
+`leafguard_artifacts.zip` contains:
+
+| File | Contents |
+|---|---|
+| `split_lab_train.csv`, `split_lab_test.csv`, `split_real_world.csv` | Every image used, its label, and whether it was kept after the data audit (with the reason if dropped) |
+| `predictions_<model>_<split>.csv` | Per-image true label, predicted label, confidence, and probability for each class (LeafGuard, LeafGuard + augmentation, Color + RF; lab test and real-world) |
+| `leafguard_classifier.joblib`, `leafguard_aug_classifier.joblib` | Trained classifiers (StandardScaler + LogisticRegression on EfficientNet-B0 features); load with `joblib.load(...)` using scikit-learn 1.6.1 |
+| `color_histograms.npz` | Color-histogram features for the Color + RF baseline (refits in seconds with `random_state=42`) |
+| `results_table.csv`, `results_table_audited.csv`, `trust_thresholds_audited.csv` | Result tables before and after the data audit |
+
+The data audit (Cell 12) removes real-world images with conflicting labels, keeps one copy of same-label near-duplicates, removes real-world images that nearly match a lab training image, and removes lab test images that nearly match a lab training image.
 
 ## Demo
 
