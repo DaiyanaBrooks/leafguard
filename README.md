@@ -76,4 +76,4 @@ The final cell defines `diagnose(path)`, which shows a photo with each model's p
 
 ## Credits
 
-PlantVillage (Hughes and Salathé, 2015); PlantDoc (Singh et al., 2020); EfficientNet (Tan and Le, 2019); PyTorch and torchvision; scikit-learn.
+PlantVillage (Hughes and Salathé, 2015); PlantDoc (Singh et al., 2020); EfficientNet (Tan and Le, 2019); PyTorch and torchvision; scikit-learn. Claude assisted in debugging code.
