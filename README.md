@@ -41,7 +41,7 @@ The notebook downloads both datasets automatically. They are not stored in this 
 |---|---|
 | Classes | 9 tomato classes present in both datasets (Target Spot dropped: no real-world match) |
 | Lab data | Stratified 25% sample of 14,607 PlantVillage images: 2,554 training / 1,095 lab test (70/30 split, seed 42) |
-| Real-world test data | 743 PlantDoc tomato images after removing 3 exact duplicates (MD5 hash); never used for training or tuning |
+| Real-world test data | 743 PlantDoc tomato images after exact-duplicate removal; 716 after the duplicate audit in Cell 12 (27 removed: 13 with conflicting labels, 14 extra near-duplicate copies); never used for training or tuning |
 | Feature extractor | EfficientNet-B0 pretrained on ImageNet (torchvision `EfficientNet_B0_Weights.DEFAULT`), frozen; 1,280 features per image |
 | LeafGuard | StandardScaler + LogisticRegression (`max_iter=3000`, `class_weight='balanced'`) |
 | LeafGuard + augmentation | Same classifier trained on originals plus 2 augmented copies per training image: RandomResizedCrop(256, scale 0.3–1.0), horizontal flip, rotation ±25°, ColorJitter(0.5, 0.5, 0.5, 0.05), GaussianBlur(kernel 9, sigma 0.5–3.0, p = 0.5); seed 42 |
@@ -49,13 +49,12 @@ The notebook downloads both datasets automatically. They are not stored in this 
 | Floor | Majority class (most common training class) |
 | Metrics | Accuracy; macro-F1; Field Retention Score (real-world macro-F1 ÷ lab macro-F1); Trust Score analysis (expected calibration error with 10 bins, AUROC, and 50/70/90% thresholds) |
 
-## Expected key results
+## Expected key results (audited test sets: 1,095 lab, 716 real-world)
 
-- LeafGuard: 93.6% accuracy on lab photos; 24.0% accuracy and 0.154 macro-F1 on real-world photos.
-- LeafGuard + augmentation: 24.9% accuracy and 0.170 macro-F1 on real-world photos.
-- Full results for all four methods: `results_table.csv`.
-
-Small differences in the last decimal place can occur on different GPU types.
+- LeafGuard: 93.6% accuracy on lab photos; 23.7% accuracy and 0.153 macro-F1 on real-world photos.
+- LeafGuard + augmentation: 24.6% accuracy and 0.169 macro-F1 on real-world photos.
+- Before the duplicate audit (743 real-world photos): LeafGuard 24.0% / 0.154; LeafGuard + augmentation 24.9% / 0.170.
+- Full results: `results_table_audited.csv` and `trust_thresholds_audited.csv` inside `leafguard_artifacts.zip`.
 
 ## Demo
 
